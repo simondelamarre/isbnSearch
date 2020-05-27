@@ -10,8 +10,7 @@ async function search(label) {
         await tab.open(`https://www.google.fr/search?psb=1&tbm=shop&q=book: ${label}`)
         await tab.untilVisible("#main") // TEST PAGE LOAD DISPLAYED
         await tab.inject("http://code.jquery.com/jquery-3.2.1.min.js") // TODO : JQUERY SELECTOR TO REPLACE BY NATIVE JS QUERY SELECTOR
-        const itemList = await tab.evaluate((arg, callback) => {
-            // INSPECTOR
+        const itemList = await tab.evaluate((arg, callback) => { // INSPECTOR
             const data = []
             $(".sh-dlr__list-result").each((index, element) => {
                 data.push({
@@ -23,19 +22,17 @@ async function search(label) {
             })
             callback(null, data)
         })
-        // console.log(JSON.stringify(itemList, null, 2));
         return Promise.resolve(itemList);
     })()
         .then((e) => {
-            console.log("Job done! ", e.length);
+            logger.info(`search success : ${label} with ${e.length} results`);
             // nick.exit()
-            return e;
+            return { status: "success", data: e };
         })
         .catch((err) => {
-            console.log(`Something went wrong: ${err}`);
+            logger.info(`Something went wrong: ${err} from search : ${label}`);
             // nick.exit(1)
-            return err;
+            return { status: "error", message: err };
         });
 };
-
 module.exports.search = search;

@@ -33,19 +33,29 @@
         const template = document.getElementById("itemRow");
 
         document.querySelector("#search").addEventListener('change', (e) => { search(e.target.value); });
+
         function search(label) {
             const url = encodeURI(`${baseURI}/search/${label}`);
-            listitems.innerHTML = "";
+            listitems.innerHTML = "chargement...";
             const Http = new XMLHttpRequest();
             Http.open("GET", url, true);
             Http.send();
             Http.onreadystatechange = (e) => {
-                results = JSON.parse(Http.responseText);
-                displayTemplate();
+                results = []
+                try {
+                    results = JSON.parse(Http.responseText);
+                    switch (results.status) {
+                        case "success": results = results.data; displayTemplate(); break;
+                        default: results = []; break;
+                    }
+                } catch (err) {
+                    listitems.innerHTML = "";
+                }
             }
         }
+
         async function displayTemplate() {
-            console.log("displayTemplate ", results);
+            listitems.innerHTML = "";
             for (let item of results) {
                 var child = document.createElement('li');
                 let temp = template.innerHTML;
