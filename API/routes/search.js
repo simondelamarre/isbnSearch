@@ -7,7 +7,7 @@ async function search(label) {
     }
     return (async () => {
         const tab = await nick.newTab()
-        await tab.open(`https://www.google.fr/search?psb=1&tbm=shop&q=${label}`)
+        await tab.open(`https://www.google.fr/search?psb=1&tbm=shop&q=book: ${label}`)
         await tab.untilVisible("#main") // TEST PAGE LOAD DISPLAYED
         await tab.inject("http://code.jquery.com/jquery-3.2.1.min.js") // TODO : JQUERY SELECTOR TO REPLACE BY NATIVE JS QUERY SELECTOR
         const itemList = await tab.evaluate((arg, callback) => {
