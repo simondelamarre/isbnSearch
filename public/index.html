@@ -1,0 +1,116 @@
+<html>
+
+<head>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+</head>
+
+<body>
+    <div class="main">
+        <div class="search">
+            <input type="search" id="search" placeholder="chercher un titre ou un isbn" />
+        </div>
+        <div class="results" id="results">
+            <ul id="listitems"></ul>
+        </div>
+    </div>
+
+    <template id="itemRow">
+        <div class="col">
+            <img src="{{image}}" width="100" />
+        </div>
+        <div class="col details">
+            <div class="label">{{label}}</div>
+            <div class="description">{{description}}</div>
+            <div class="price">{{price}}</div>
+            <a class="link" href="{{url}}">link</a>
+        </div>
+    </template>
+
+    <script>
+        let results = [];
+        const listitems = document.querySelector('#listitems');
+        const baseURI = "http://localhost:3939";
+        const template = document.getElementById("itemRow");
+
+        document.querySelector("#search").addEventListener('change', (e) => { search(e.target.value); });
+        function search(label) {
+            const url = encodeURI(`${baseURI}/search/${label}`);
+            listitems.innerHTML = "";
+            const Http = new XMLHttpRequest();
+            Http.open("GET", url, true);
+            Http.send();
+            Http.onreadystatechange = (e) => {
+                results = JSON.parse(Http.responseText);
+                displayTemplate();
+            }
+        }
+        async function displayTemplate() {
+            console.log("displayTemplate ", results);
+            for (let item of results) {
+                var child = document.createElement('li');
+                let temp = template.innerHTML;
+                await Object.keys(item).forEach((key) => {
+                    temp = temp.replace(`{{${key}}}`, item[key]);
+                });
+                child.innerHTML = temp;
+                listitems.appendChild(child);
+            }
+        }
+
+    </script>
+
+    <style>
+        html,
+        body {
+            padding: 0;
+            margin: 0;
+            font-family: sans-serif;
+        }
+
+        .search {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .search input {
+            font-size: 20px;
+            padding: 10px;
+            width: 80%;
+            max-width: 550px;
+        }
+
+        .results {
+            text-align: center;
+        }
+
+        #listitems {
+            max-width: 94%;
+            width: 800px;
+            margin: 3%;
+            left: 0;
+            right: 0;
+            margin: auto;
+            display: inline-block;
+            overflow: hidden;
+            padding: 0;
+        }
+
+        #listitems li {
+            list-style-type: none;
+            display: flex;
+            text-align: left;
+            margin: 10px;
+        }
+
+        #listitems li .details {
+            padding-left: 15px;
+        }
+
+        #listitems li .details .label {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+{
+  "name": "isbnsearch",
+  "version": "1.0.0",
+  "description": "search product data by isbn",
+  "main": "/API/index.js",
+  "scripts": {
+    "test": "node API/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simondelamarre/isbnSearch.git"
+  },
+  "keywords": [
+    "isbn",
+    "search",
+    "headless",
+    "browser",
+    "product",
+    "items"
+  ],
+  "author": "Simon Delamarre",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/simondelamarre/isbnSearch/issues"
+  },
+  "homepage": "https://github.com/simondelamarre/isbnSearch#readme",
+  "dependencies": {
+    "http": "0.0.1-security",
+    "log4js": "^6.3.0",
+    "nickjs": "^0.3.7"
+  }
+}
