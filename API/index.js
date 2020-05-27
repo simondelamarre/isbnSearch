@@ -23,7 +23,7 @@ const server = http.createServer(async function (req, res) {
                 label: params[2]
             }
             let results = await search.search(describe.label);
-            res.send(JSON.stringify(results));
+            res.write(JSON.stringify(results));
             break;
         default:
             var routeNotFound = 'The following route was not found ';
