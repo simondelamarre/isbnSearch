@@ -5,10 +5,11 @@ log4js.configure({
     appenders: { cheese: { type: "file", filename: "cheese.log" } },
     categories: { default: { appenders: ["cheese"], level: "error" } }
 })
+
 logger = log4js.getLogger('cheese') // defined as global
+
 const search = require('./routes/search')
 const server = http.createServer(async function (req, res) {
-    logger.info(req.url)
     res.setHeader("Access-Control-Allow-Origin", "*")
     let params = req.url.split('/')
     let describe = {};
@@ -31,9 +32,8 @@ const server = http.createServer(async function (req, res) {
             }
             res.write('under development')
         default:
-            var routeNotFound = 'The following route was not found '
+            logger.error(`The following route was not found ${$routeNotFound.concat(req.url)}`, new Date());
             res.write('404 PAGE NOT FOUND')
-            logger.error(routeNotFound.concat(req.url))
     }
     res.end();
 });
